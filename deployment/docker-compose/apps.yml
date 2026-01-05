@@ -3,6 +3,7 @@ version: "3.8"
 networks:
   bookstore-network:
     external: true
+    name: docker-compose_bookstore-network
 
 services:
   catalog-service:
@@ -99,15 +100,12 @@ services:
     container_name: bookstore-webapp
     environment:
       SPRING_PROFILES_ACTIVE: docker
-      BOOKSTORE_API_GATEWAY_URL: http://api-gateway:8989
-      OAUTH2_SERVER_URL: http://keycloak:9191
+      BOOKSTORE_API_GATEWAY_URL: http://localhost:8989
+      OAUTH2_SERVER_URL: http://localhost:9191
       MANAGEMENT_TRACING_ENABLED: ${MANAGEMENT_TRACING_ENABLED}
-      MANAGEMENT_ZIPKIN_TRACING_ENDPOINT: http://tempo:9411
-    ports:
-      - "8080:8080"
+      MANAGEMENT_ZIPKIN_TRACING_ENDPOINT: http://localhost:9411
     restart: unless-stopped
     mem_limit: 700m
     labels:
       logging: "promtail"
-    # networks:
-    #   - bookstore-network
+    network_mode: host
